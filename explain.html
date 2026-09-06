@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Methodology — Open Grade Distributions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="index.html" class="wordmark">Open Grade <span>Distributions</span></a>
+    <ul class="navlinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="explain.html" class="active">Methodology</a></li>
+      <li><a href="source.html">Provenance</a></li>
+      <li><a href="story.html">Story</a></li>
+      <li><a href="developers.html">Developers</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="shell">
+  <div class="page-header">
+    <p class="eyebrow">Methodology</p>
+    <h1>How the numbers are calculated</h1>
+  </div>
+
+  <div class="prose">
+    <h2>Grade categories</h2>
+    <p>UNSW's disclosure log reports 20 grade codes per course offering. We grouped them using UNSW's own "Grade Code / Grade Description" legend (printed on page 1 of the disclosure log PDF), not by guessing what a code probably means:</p>
+    <table class="legend-table">
+      <tr><th>Group</th><th>Codes</th><th>Meaning</th></tr>
+      <tr><td>Fail</td><td><code>FL, UF, AF, NF</code></td><td>Fail, Unsatisfactory Fail, Absent Fail, Fail/Not Successful/Discontinued</td></tr>
+      <tr><td>Standard pass scale</td><td><code>PS, CR, DN, HD</code></td><td>Pass, Credit, Distinction, High Distinction</td></tr>
+      <tr><td>Withdrawal</td><td><code>AW, PW</code></td><td>Academic Withdrawal, Permitted Withdrawal</td></tr>
+      <tr><td>Competency scale</td><td><code>CN, CO, CM, SY</code></td><td>Not Yet Competent, Competent, Competent with Merit, Successful/Satisfactory</td></tr>
+      <tr><td>Other / in-progress</td><td><code>EF, EC, EM, AS, PE, NC</code></td><td>Enrolment Continuing (×2), Excluded (Misconduct), Audited, Professional Experience, Not Completed</td></tr>
+    </table>
+
+    <h2>Normalized rates</h2>
+    <p>The Fail %, PS %, CR %, DN % and HD % columns are <strong>normalized against withdrawals only</strong>, as requested: a withdrawal isn't really an academic outcome, so we don't let it dilute the fail/pass percentages. Concretely, for each course offering:</p>
+    <div class="formula">Base = 100% − (AW% + PW%)
+Fail_norm = (FL% + UF% + AF% + NF%) / Base × 100
+PS_norm   = PS% / Base × 100
+CR_norm   = CR% / Base × 100
+DN_norm   = DN% / Base × 100
+HD_norm   = HD% / Base × 100</div>
+    <p>We deliberately <em>don't</em> also strip out the "other" or competency-scale categories from the base — only withdrawals are excluded. This means a course with an unusually large Enrolment Continuing (EF/EC) share — common in multi-term thesis courses — will show suppressed Fail/Pass percentages that term. We flag any offering where "other" grades exceed 15% with a note, but don't hide it.</p>
+
+    <h2>Non-standard (competency) grading</h2>
+    <p>A number of UNSW courses — mostly practicums, placements, and law/professional-practice electives — are graded Competent / Not Yet Competent / Competent with Merit rather than Fail through High Distinction. For these, the standard Fail/PS/CR/DN/HD columns would just show zeros, which is misleading rather than informative. We instead detect them (negligible standard fail+pass activity, but meaningful CN/CO/CM/SY activity) and mark the row <strong>"Non-standard grading"</strong> in the table, with a tooltip listing the actual grade breakdown.</p>
+
+    <h2>Redacted rows</h2>
+    <p>Some rows in UNSW's disclosure log are blacked out under GIPA sections 3(a) and 3(b) (their public-interest exemption clauses) — typically small classes, where individual students' results could otherwise be inferred. These rows are kept in the dataset (rather than deleted) so the ledger accurately reflects what was and wasn't disclosed, but every metric column is left blank and shown as <strong>"REDACTED BY UNIVERSITY"</strong> in the table.</p>
+
+    <h2>The Ease/Hardness Index</h2>
+    <p>There's no official measure of "how hard" a course is, so we built one. It rewards High Distinctions heavily, Distinctions moderately, Credits lightly, and penalises Fails one-for-one against High Distinctions — Passes are treated as neutral and don't move the score either way:</p>
+    <div class="formula">Index = HD_norm − Fail_norm + 0.5 × DN_norm + 0.25 × CR_norm</div>
+    <p>Higher Index = more High Distinctions relative to Fails = "easier" by this measure. Lower (more negative) = "harder". It's a deliberately simple, transparent heuristic — not a validated difficulty score — and it's <code>—</code> (blank) for redacted rows and non-standard-grading rows, since Fail/HD percentages aren't meaningful there. We'd genuinely welcome a better formula; this one is a reasonable starting point, not a claim of precision.</p>
+
+    <h2>Term codes (T1–T3, S, H1–H6)</h2>
+    <p>UNSW has used several different term-naming systems over the years covered by this data. We use three separate codes rather than squeezing them into one artificial scale:</p>
+    <ul>
+      <li><code>T</code> — a regular-length term: Semester 1/2, Term 1/2/3, or Trimester 1/2/3.</li>
+      <li><code>S</code> — a Summer session. This gets its own code rather than being folded into <code>T3</code>: a course can run both a regular Term 3 <em>and</em> a separate Summer Term in the same year, and those are two different student cohorts with two different results, not one term counted twice.</li>
+      <li><code>H</code> — a Hexamester (<code>H1</code>–<code>H6</code>): UNSW splits the year into six shorter sub-terms for a subset of flexible-delivery courses (mostly postgraduate). No course in this dataset mixes the Hexamester system with the Term/Summer system, so the two never need to line up against each other.</li>
+    </ul>
+    <p>The number always comes directly from UNSW's own term text where one is given — e.g. "Hexamester 4" becomes <code>H4</code>, "Semester 1" becomes <code>T1</code>. Combined with the two-digit year, a course offering in Term 1 2024 is labelled <code>24T1</code>; one in Hexamester 5 2023 is <code>23H5</code>. The exact original term text (e.g. "Semester 2 Canberra") is still shown in full in the underlying CSV.</p>
+    <p>For the date-range filter and the chronological dashboard charts, each code maps to a fixed position within its year (H1–H6 map straight to 1–6; T1/T2/T3/S map to 1/3/5/6) so that terms are ordered correctly and — importantly — two genuinely different terms are never accidentally merged into one data point.</p>
+
+    <h2>Cross-listed cohorts (same code, two student populations)</h2>
+    <p>A number of course codes are cross-listed: the same code runs one cohort for Undergraduate students and a separate one for Postgraduate students in the same term, often with very different results (a 20-student undergraduate class next to a 1-student postgraduate one, for instance). These appear as separate rows in the table. The dashboard only ever charts <strong>one</strong> cohort at a time — whichever row you clicked — and tells you when a second cohort exists so you can switch to it, rather than silently averaging two different student populations into one misleading line.</p>
+
+    <h2>Course code splitting</h2>
+    <p>Each row's raw "Course" text (e.g. <code>PSYC5001 Introduction to Psychology 1 065551 1 PGRD</code>) is split into Course Code, Course Name, Course ID (the internal 6-digit UNSW class ID), and an Offering Seq number. That last single digit is almost always <code>1</code>, occasionally <code>2</code> or <code>3</code> across the dataset — our best guess is that it's a sequence number distinguishing multiple offerings/sections of the same course in the same term, but UNSW's disclosure log doesn't document the field, so treat that interpretation as informed speculation rather than fact.</p>
+  </div>
+</div>
+
+<footer class="sitefoot">
+  Data source: UNSW GIPA disclosure log · Not affiliated with or endorsed by UNSW Sydney ·
+  <a href="source.html">About this data</a>
+</footer>
+</body>
+</html>

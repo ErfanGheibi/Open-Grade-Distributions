@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Provenance — Open Grade Distributions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="index.html" class="wordmark">Open Grade <span>Distributions</span></a>
+    <ul class="navlinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="explain.html">Methodology</a></li>
+      <li><a href="source.html" class="active">Provenance</a></li>
+      <li><a href="story.html">Story</a></li>
+      <li><a href="developers.html">Developers</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="shell">
+  <div class="page-header">
+    <p class="eyebrow">Provenance</p>
+    <h1>Where this data comes from</h1>
+  </div>
+
+  <div class="prose">
+    <h2>UNSW's GIPA disclosure log</h2>
+    <p>Under section 25 of the <em>Government Information (Public Access) Act 2009</em> (NSW) — commonly called GIPA — every NSW public university and government agency is required to keep a public "disclosure log" of information it has released in response to access applications, where that information could reasonably be of interest to people beyond the original requester. That's the legal mechanism that makes documents like grade-distribution breakdowns, which aren't routinely published elsewhere, publicly available at all.</p>
+    <p>UNSW's own access-to-information page describes both an informal and a formal disclosure log, and explains how to request information that isn't already listed. It's maintained by UNSW's Legal &amp; Compliance office:</p>
+    <p><a href="https://www.unsw.edu.au/assurance-integrity/legal-compliance/access-to-information" target="_blank" rel="noopener">unsw.edu.au/assurance-integrity/legal-compliance/access-to-information</a></p>
+
+    <h2>The specific document behind this site</h2>
+    <p>This site is built from a single PDF released through that log: <code>UNSW_disclosure_log_grade_distributions_21T3-24T2.pdf</code> — a 180-page report listing the percentage grade breakdown (Fail through High Distinction, plus withdrawals and other codes) for individual course offerings from Term 3 2021 through Term 2 2024. Some rows are redacted by UNSW under GIPA's own exemption clauses (sections 3(a) and 3(b)), generally to protect the privacy of students in very small classes — those redactions are preserved as-is in this dataset rather than filled in or estimated.</p>
+
+    <h2>How we got from PDF to website</h2>
+    <p>The PDF isn't a machine-readable table — it's positioned text with no cell borders, and rows with a 0% result for a given grade simply omit that grade entirely rather than printing "0.00%". We wrote a small pipeline to handle this:</p>
+    <ol>
+      <li>Parse every word's exact position on the page and match each grade percentage to the nearest grade-code column header (which repeats on every page), rather than relying on whitespace alignment.</li>
+      <li>Split the combined "Course" field into course code, course name, internal class ID, and offering sequence.</li>
+      <li>Categorise the 20 grade codes using UNSW's own published legend, and derive the normalized rates and Index described on the <a href="explain.html">Methodology page</a>.</li>
+    </ol>
+    <p>Every processing step is a plain Python script with no hidden logic — see the <a href="developers.html">Developers</a> page.</p>
+
+    <h2>Caveats</h2>
+    <ul>
+      <li>This is a static snapshot (21T3–24T2). It won't reflect course changes after that window.</li>
+      <li>Redacted rows are real gaps in the public record, not our omissions — UNSW chose not to disclose those figures.</li>
+      <li>This site is an independent, unofficial project. It is not affiliated with, endorsed by, or produced by UNSW Sydney.</li>
+    </ul>
+  </div>
+</div>
+
+<footer class="sitefoot">
+  Data source: UNSW GIPA disclosure log · Not affiliated with or endorsed by UNSW Sydney ·
+  <a href="source.html">About this data</a>
+</footer>
+</body>
+</html>
