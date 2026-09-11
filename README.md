@@ -9,9 +9,8 @@ plain HTML/CSS/JS, hostable directly on GitHub Pages.
 ```
 index.html          Home page: searchable/sortable grade table + per-course dashboard
 explain.html         Methodology: metrics, normalization, the Index formula
-source.html          Where the data comes from (UNSW's GIPA disclosure log)
-story.html            Placeholder page
-developers.html       Placeholder page
+source.html          Provenance: where the data comes from (UNSW's GIPA disclosure log)
+motivation.html       Motivation: why this project exists
 css/style.css         All styling (design tokens at the top)
 js/data.js             Shared data loading + small utilities
 js/home.js             Table/filter/sort/search + course dashboard + chart logic
