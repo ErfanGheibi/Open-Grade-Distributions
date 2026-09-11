@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Open Grade Distributions — UNSW Course Grade Explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="index.html" class="wordmark">Open Grade <span>Distributions</span></a>
+    <ul class="navlinks">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="explain.html">Methodology</a></li>
+      <li><a href="source.html">Provenance</a></li>
+      <li><a href="motivation.html">Motivation</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="shell">
+
+  <section class="hero">
+    <div class="hero-text">
+      <div class="manifesto">
+        <p class="manifesto-line">An independent student project.</p>
+        <p class="manifesto-line">Will always be free to access.</p>
+        <p class="manifesto-line accent">We are requesting new data.</p>
+      </div>
+    </div>
+    <div class="ledger-bar-wrap">
+      <p class="ledger-bar-title">Dataset-wide grade split</p>
+      <div class="ledger-bar" id="ledgerBar"></div>
+      <div class="ledger-legend">
+        <span><span class="swatch c-fail"></span>Fail</span>
+        <span><span class="swatch c-ps"></span>Pass (PS)</span>
+        <span><span class="swatch c-cr"></span>Credit (CR)</span>
+        <span><span class="swatch c-dn"></span>Distinction (DN)</span>
+        <span><span class="swatch c-hd"></span>High Distinction (HD)</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="card">
+    <div class="toolbar">
+      <div class="field search">
+        <label for="search">Search course code or name</label>
+        <input type="text" id="search" placeholder="e.g. COMP1511, or &quot;Data Structures&quot;">
+      </div>
+      <div class="field">
+        <label for="sort">Sort</label>
+        <select id="sort">
+          <option value="default">Dataset order</option>
+          <option value="easiest">Easiest first</option>
+          <option value="hardest">Hardest first</option>
+          <option value="highest-hd">Highest HD rate</option>
+          <option value="highest-fail">Highest fail rate</option>
+        </select>
+      </div>
+      <div class="result-count" id="resultCount"></div>
+    </div>
+    <div class="table-caption">
+      Each row is a <b>time-averaged</b> summary across every term that course (and career level) has been offered — click a row to see term-by-term detail, including which terms were averaged in. &nbsp;·&nbsp;
+      <b>Fail/PS/CR/DN/HD</b> add up to 100% for most rows (withdrawals excluded) — <b>WD</b> is separate: the share of all enrolled students who withdrew. A small number of rows (~8%) include other administrative grades (e.g. Enrolment Continuing for multi-term theses) that take up part of the remainder — see the <a href="explain.html">Methodology page</a>.
+    </div>
+    <div class="table-scroll">
+      <table class="grid">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th class="al">Code</th>
+            <th class="al">Course name</th>
+            <th title="UG = Undergraduate offering, PG = Postgraduate offering">Career</th>
+            <th title="Time-averaged across all terms offered">Fail %*</th>
+            <th title="Time-averaged across all terms offered">PS %*</th>
+            <th title="Time-averaged across all terms offered">CR %*</th>
+            <th title="Time-averaged across all terms offered">DN %*</th>
+            <th title="Time-averaged across all terms offered">HD %*</th>
+            <th title="Time-averaged across all terms offered">WD %*</th>
+            <th title="Time-averaged across all terms offered">Index*</th>
+            <th>Grades</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="dashboard">
+    <div class="dash-card dash-empty">Click any row above to see that course's grade trend over time.</div>
+  </div>
+
+</div>
+
+<footer class="sitefoot">
+  Data source: UNSW GIPA disclosure log · Not affiliated with or endorsed by UNSW Sydney ·
+  <a href="source.html">About this data</a>
+</footer>
+
+<script src="js/vendor/chart.umd.js"></script>
+<script src="js/data.js"></script>
+<script src="js/home.js"></script>
+</body>
+</html>
