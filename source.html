@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Provenance — Open Grade Distributions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="index.html" class="wordmark">Open Grade <span>Distributions</span></a>
+    <ul class="navlinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="explain.html">Methodology</a></li>
+      <li><a href="source.html" class="active">Provenance</a></li>
+      <li><a href="motivation.html">Motivation</a></li>
+      <li><a href="roadmap.html">Roadmap</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="shell">
+  <div class="page-header">
+    <p class="eyebrow">Provenance</p>
+    <h1>Where this data comes from</h1>
+  </div>
+
+  <div class="prose">
+    <p>We host (without modification) the public data behind this site as <a href="https://github.com/YOUR-GITHUB-USERNAME/YOUR-REPO-NAME/tree/main/original_data" target="_blank" rel="noopener">original data</a> — so anyone can check our extraction and calculations against the source. If you find any errors, please email us directly on <a href="mailto:REPLACE-WITH-YOUR-EMAIL@example.com">REPLACE-WITH-YOUR-EMAIL@example.com</a>.</p>
+
+    <h2>Government Information (Public Access) Act 2009</h2>
+    <p>Every NSW public university and government agency operates under the <em><a href="https://legislation.nsw.gov.au/view/whole/pdf/inforce/2025-02-09/act-2009-052" target="_blank" rel="noopener">Government Information (Public Access) Act 2009</a></em> (NSW) — commonly called GIPA. Section 9 of the Act gives any member of the public a legally enforceable right to apply directly to an agency for government information it holds, regardless of who's asking or why. It's this right, not just the disclosure log described below, that we intend to keep relying on for future requests — see our <a href="roadmap.html">Roadmap page</a> for what we're asking for next.</p>
+    <p>Separately, under section 25 of the Act, every agency is required to keep a public "disclosure log" of information it has released in response to access applications, where that information could reasonably be of interest to people beyond the original requester. That's the legal mechanism that makes documents like grade-distribution breakdowns, which aren't routinely published elsewhere, publicly available at all.</p>
+
+    <h2>The University of New South Wales</h2>
+    <p>The data is currently not hosted on the <a href="https://www.unsw.edu.au/assurance-integrity/legal-compliance/access-to-information" target="_blank" rel="noopener">disclosure log</a>; it can be requested from <a href="mailto:gipaa@unsw.edu.au">gipaa@unsw.edu.au</a>. Note that UNSW has redacted some rows using exemption clauses 3(a) and 3(b).</p>
+    <p>The data was provided to us as tables in a PDF file, but using it was non-trivial. The tables had no underlying structure — no cell boundaries or column definitions a standard extraction tool could detect — and values of zero were represented by empty space rather than being printed as "0.00%". We instead read each value's exact coordinates on the page and matched it to the column header it sat beneath, then transformed the result into a CSV (Comma Separated Values) file. We also applied several other transformations; there's more detail on the <a href="explain.html">Methodology page</a>.</p>
+    <ul>
+      <li>This is a static snapshot (21T3–24T2). It won't reflect course changes after that window.</li>
+      <li>Redacted rows are real gaps in the public record, not our omissions — UNSW chose not to disclose those figures.</li>
+      <li>This site is an independent, unofficial project. It is not affiliated with, endorsed by, or produced by UNSW Sydney.</li>
+    </ul>
+  </div>
+</div>
+
+<footer class="sitefoot">
+  Data source: UNSW GIPA disclosure log · Not affiliated with or endorsed by UNSW Sydney ·
+  <a href="source.html">About this data</a>
+</footer>
+</body>
+</html>
